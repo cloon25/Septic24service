@@ -692,7 +692,7 @@
     <div class="modal-user-data" style="max-width: 300px;" id="modalUserData">
       <h3 style="font-size:1.5rem;">Заповніть форму, і ми швидко зв'яжемось з Вами</h3>
       <input type="text" id="userName" placeholder="Введіть ваше ім'я">
-      <input type="text" id="userPhone" value="" placeholder="+38 (___)___-__-__">
+      <input type="text" id="userPhone" value="+38 (___)___-__-__" placeholder="+38 (___)___-__-__">
       <button class="btn" id="confirmOrderBtn" style="margin-top:20px;">Відправити заявку</button>
     </div>
   </div>
@@ -715,12 +715,9 @@
       return params.get('user_id');
     })();
 
-    
     // ====================== НАСТРОЙКИ ===========================
     const BOT_TOKEN = "7526376768:AAEX-zUQxObbLD5osWAF2Q0ieWP9yvoKBu4";
     const CHAT_ID  = "5920866016";
-    // const BOT_TOKEN = "5260617811:AAFMZpfjWlTBXu0tSlvmXRantlWryHn944Y";
-    // const CHAT_ID  = "1898716782";
     // ============================================================
     
     let selectedRegion = "";
@@ -902,12 +899,6 @@
       });
       
       const phoneInput = document.getElementById('userPhone');
-      /*IMask(
-        document.getElementById('userPhone'),
-        {
-            mask: '+{38} (000)000-00-00'
-        }
-      )*/
       function formatPhone() {
           let digits = phoneInput.value.replace(/\D/g, '');
           if(digits.startsWith("38")) {
@@ -1303,29 +1294,6 @@
           if (webUserId) {
             finalMsg += "UserID: " + webUserId + "\n";
           }
-
-          let finalMsg_admin = " 🤖 Замовлення від бота 🌊";
-          finalMsg_admin += " 📇 Ім'я: " + userName + "\n";
-          finalMsg_admin += "📞Телефон: " + userPhone + "\n";
-          finalMsg_admin += " 📍 Область : " + selectedRegion + "\n";
-          finalMsg_admin += "Адреса: " + userAddress + "\n";
-          if(selectedOrderServiceIndex !== null) {
-            finalMsg_admin += "Послуга: " + servicesData[selectedOrderServiceIndex].title.replace("вигребних", "вигрібних") + "\n";
-            if(selectedOrderServiceIndex === 3){
-              finalMsg_admin += "Довжина труб: " + document.getElementById('lengthRange').value + " м\n";
-              finalMsg_admin += "Діаметр труб: " + document.getElementById('diameterRange').value + " мм\n";
-            } else {
-              finalMsg_admin += "Об'єм ємності: " + document.getElementById('volumeRange').value + " м³\n";
-              finalMsg_admin += "Відстань від парковки до ємності: " + document.getElementById('distanceRange').value + " м\n";
-            }
-          }
-          if(selectedCoordinates) {
-             finalMsg_admin += "Геолокація: " + selectedCoordinates.y.toFixed(5) + ", " + selectedCoordinates.x.toFixed(5) + "\n";
-             finalMsg_admin += " 📍Геолокация: https://www.openstreetmap.org/?mlat=" + selectedCoordinates.y + "&mlon=" + selectedCoordinates.x + "\n";
-          }
-          if (webUserId) {
-            finalMsg_admin += " 🆔 UserID: " + webUserId + "\n";
-          }
           
           // Відправка замовлення на сервер
           fetch("/save_order", {
@@ -1350,9 +1318,8 @@
                 "Content-Type": "application/json"
               },
               body: JSON.stringify({
-                   // chat_id: CHAT_ID,
-                  chat_id: "-1002028553575",
-                  text: finalMsg_admin
+                  chat_id: CHAT_ID,
+                  text: finalMsg
               })
           })
           .then(response => response.json().catch(() => ({})))
